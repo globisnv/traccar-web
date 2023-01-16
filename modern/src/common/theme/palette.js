@@ -11,6 +11,8 @@ const colors = {
   medium: amber[700],
   negative: red[500],
   neutral: grey[500],
+  custom: '#c5d685',
+  custom2: '#6f851c',
   geometry: '#3bb2d0',
 };
 
@@ -19,10 +21,11 @@ export default {
     default: colors.background,
   },
   primary: {
-    main: colors.primary,
+    main: colors.custom,
+    contrastText: colors.white,
   },
   secondary: {
-    main: colors.secondary,
+    main: colors.custom2,
     contrastText: colors.white,
   },
   colors,

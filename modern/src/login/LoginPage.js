@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import {
-  useMediaQuery, InputLabel, Select, MenuItem, FormControl, Button, TextField, Link, Snackbar, IconButton, Tooltip,
+  useMediaQuery, InputLabel, Select, MenuItem, FormControl, Button, ButtonGroup, TextField, Snackbar, IconButton, Tooltip,
 } from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import CloseIcon from '@mui/icons-material/Close';
@@ -36,9 +36,7 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 'unset',
   },
   resetPassword: {
-    cursor: 'pointer',
-    textAlign: 'center',
-    marginTop: theme.spacing(2),
+    minWidth: 'unset',
   },
 }));
 
@@ -170,38 +168,34 @@ const LoginPage = () => {
           onClick={handlePasswordLogin}
           onKeyUp={handleSpecialKey}
           variant="contained"
-          color="secondary"
           disabled={!email || !password}
         >
           {t('loginLogin')}
         </Button>
-        <div className={classes.extraContainer}>
+        <ButtonGroup variant="contained" fullWidth>
           <Button
             className={classes.registerButton}
             onClick={() => navigate('/register')}
             disabled={!registrationEnabled}
-            color="secondary"
           >
             {t('loginRegister')}
           </Button>
-          {languageEnabled && (
-            <FormControl fullWidth>
-              <InputLabel>{t('loginLanguage')}</InputLabel>
-              <Select label={t('loginLanguage')} value={language} onChange={(e) => setLanguage(e.target.value)}>
-                {languageList.map((it) => <MenuItem key={it.code} value={it.code}>{it.name}</MenuItem>)}
-              </Select>
-            </FormControl>
+          {emailEnabled && (
+            <Button
+              onClick={() => navigate('/reset-password')}
+              className={classes.resetPassword}
+            >
+              {t('loginReset')}
+            </Button>
           )}
-        </div>
-        {emailEnabled && (
-          <Link
-            onClick={() => navigate('/reset-password')}
-            className={classes.resetPassword}
-            underline="none"
-            variant="caption"
-          >
-            {t('loginReset')}
-          </Link>
+        </ButtonGroup>
+        {languageEnabled && (
+          <FormControl fullWidth>
+            <InputLabel>{t('loginLanguage')}</InputLabel>
+            <Select label={t('loginLanguage')} value={language} onChange={(e) => setLanguage(e.target.value)}>
+              {languageList.map((it) => <MenuItem key={it.code} value={it.code}>{it.name}</MenuItem>)}
+            </Select>
+          </FormControl>
         )}
       </div>
       <Snackbar

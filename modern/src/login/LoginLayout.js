@@ -1,5 +1,7 @@
 import React from 'react';
-import { useMediaQuery, Paper } from '@mui/material';
+import {
+  useMediaQuery, Paper, Typography, Link, Box,
+} from '@mui/material';
 import makeStyles from '@mui/styles/makeStyles';
 import { useTheme } from '@mui/material/styles';
 import LogoImage from './LogoImage';
@@ -13,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    flexDirection: 'column',
     background: theme.palette.primary.main,
     paddingBottom: theme.spacing(5),
     width: theme.dimensions.sidebarWidth,
@@ -47,9 +50,23 @@ const LoginLayout = ({ children }) => {
 
   return (
     <main className={classes.root}>
-      <div className={classes.sidebar}>
-        {!useMediaQuery(theme.breakpoints.down('lg')) && <LogoImage color={theme.palette.secondary.contrastText} />}
-      </div>
+      {!useMediaQuery(theme.breakpoints.down('lg')) &&
+        (
+          <div className={classes.sidebar}>
+            <LogoImage color={theme.palette.secondary.contrastText} />
+            <Box sx={{ p: 2 }} />
+            <Typography variant="h4">
+              GlobbTracc
+            </Typography>
+            <Typography variant="subtitle">
+              Powered by
+              {' '}
+              <Link href="https://www.traccar.org/" color="secondary">
+                Traccar
+              </Link>
+            </Typography>
+          </div>
+        )}
       <Paper className={classes.paper}>
         <form className={classes.form}>
           {children}
