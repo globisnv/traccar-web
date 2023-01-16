@@ -100,6 +100,7 @@ export default (keyword, filter, filterSort, filterMap, positions, setFilteredDe
                   let newAttr = attrVal[i][keyVal[i][j]];
                   newAttr = toJson(newAttr);
 
+                  // If array, add each element to be searched
                   if (!Array.isArray(newAttr)) {
                     newAttrVal.push(newAttr);
                   } else {
