@@ -122,7 +122,12 @@ const StatusCard = ({ deviceId, position, onClose, disableActions, desktopPaddin
   const deviceImage = device?.attributes?.deviceImage;
 
   const positionAttributes = usePositionAttributes(t);
-  const positionItems = useAttributePreference('positionItems', 'speed,address,totalDistance,course', device.groupId);
+  let positionItems;
+  if (typeof device === 'undefined') {
+    positionItems = useAttributePreference('positionItems', 'speed,address,totalDistance,course');
+  } else {
+    positionItems = useAttributePreference('positionItems', 'speed,address,totalDistance,course', device.groupId);
+  }
 
   const [anchorEl, setAnchorEl] = useState(null);
 
