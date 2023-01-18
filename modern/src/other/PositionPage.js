@@ -121,7 +121,7 @@ const PositionPage = () => {
       if (Array.isArray(newValue)) {
         for (let i = 0; i < newValue.length; i += 1) {
           const newName = `${name}:${i}`;
-          children.push(constructAttributeObj(newName, newValue, newValue[i]));
+          children.push(constructAttributeObj(newName, newValue, i));
         }
       } else {
         Object.keys(newValue).forEach((child) => {
