@@ -314,6 +314,10 @@ export default (t) => useMemo(() => ({
     name: t('positionBlocked'),
     type: 'boolean',
   },
+  lock: {
+    name: t('alarmLock'),
+    type: 'boolean',
+  },
   dtcs: {
     name: t('positionDtcs'),
     type: 'string',
@@ -335,6 +339,15 @@ export default (t) => useMemo(() => ({
   driverUniqueId: {
     name: t('positionDriverUniqueId'),
     type: 'string',
+  },
+  card: {
+    name: t('positionCard'),
+    type: 'string',
+  },
+  drivingTime: {
+    name: t('positionDrivingTime'),
+    type: 'number',
+    dataType: 'hours',
   },
   color: {
     name: t('attributeColor'),

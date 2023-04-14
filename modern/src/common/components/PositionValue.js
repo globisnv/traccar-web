@@ -77,15 +77,15 @@ const PositionValue = ({ position, property, attribute }) => {
       case 'altitude':
         return formatAltitude(value, altitudeUnit, t);
       case 'batteryLevel':
-        return formatPercentage(value, t);
+        return value != null ? formatPercentage(value, t) : '';
       case 'alarm':
         return formatAlarm(value, t);
       case 'odometer':
       case 'distance':
       case 'totalDistance':
-        return formatDistance(value, distanceUnit, t);
+        return value != null ? formatDistance(value, distanceUnit, t) : '';
       case 'hours':
-        return formatNumericHours(value, t);
+        return value != null ? formatNumericHours(value, t) : '';
       default:
         if (typeof value === 'number') {
           return formatNumber(value);
