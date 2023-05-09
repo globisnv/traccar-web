@@ -19,6 +19,7 @@ import {
 import { useTranslation } from '../common/components/LocalizationProvider';
 import { mapIconKey, mapIcons } from '../map/core/preloadImages';
 import { useAdministrator } from '../common/util/permissions';
+import { toJson } from '../common/util/converter';
 import { ReactComponent as EngineIcon } from '../resources/images/data/engine.svg';
 import { useAttributePreference } from '../common/util/preferences';
 
@@ -60,6 +61,37 @@ const DeviceRow = ({ data, index, style }) => {
   const devicePrimary = useAttributePreference('devicePrimary', 'name');
   const deviceSecondary = useAttributePreference('deviceSecondary', '');
 
+  // TODO: preload somewhere (?)
+  // Pick icon color based on attributes
+  const colorPreference = useAttributePreference('colorPreference', '', item.groupId);
+  let color = '#bcbcbc';
+  let colorAttr;
+  let colorPreferenceObj;
+  if (colorPreference !== '') {
+    const idx = colorPreference.indexOf('{');
+    colorAttr = colorPreference.substring(0, idx);
+    colorPreferenceObj = toJson(colorPreference.substring(idx, colorPreference.length));
+    if (typeof colorPreferenceObj !== 'string') {
+      if (colorAttr in item.attributes) {
+        const value = item.attributes[colorAttr];
+        if (value in colorPreferenceObj) {
+          color = colorPreferenceObj[value];
+        }
+      }
+    }
+  }
+
+  const formatProperty = (key) => {
+    if (key === 'geofenceIds') {
+      const geofenceIds = item[key] || [];
+      return geofenceIds
+        .filter((id) => geofences.hasOwnProperty(id))
+        .map((id) => geofences[id].name)
+        .join(', ');
+    }
+    return item[key];
+  };
+
   const secondaryText = () => {
     let status;
     if (item.status === 'online' || !item.lastUpdate) {
@@ -83,7 +115,7 @@ const DeviceRow = ({ data, index, style }) => {
         disabled={!admin && item.disabled}
       >
         <ListItemAvatar>
-          <Avatar>
+          <Avatar style={{ backgroundColor: color }}>
             <img className={classes.icon} src={mapIcons[mapIconKey(item.category)]} alt="" />
           </Avatar>
         </ListItemAvatar>

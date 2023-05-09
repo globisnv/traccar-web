@@ -21,7 +21,10 @@ export const usePreference = (key, defaultValue) => useSelector((state) => {
   return defaultValue;
 });
 
-export const useAttributePreference = (key, defaultValue) => useSelector((state) => {
+export const useAttributePreference = (key, defaultValue, groupId) => useSelector((state) => {
+  if (groupId && containsProperty(state.groups.items[groupId].attributes, key)) {
+    return state.groups.items[groupId].attributes[key];
+  }
   if (state.session.server.forceSettings) {
     if (containsProperty(state.session.server.attributes, key)) {
       return state.session.server.attributes[key];

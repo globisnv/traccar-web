@@ -1,25 +1,59 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from '@mui/material';
+import { Link, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { useTheme } from '@mui/material/styles';
 import {
   formatAlarm, formatAltitude, formatBoolean, formatCoordinate, formatCourse, formatDistance, formatNumber, formatNumericHours, formatPercentage, formatSpeed, formatTime,
 } from '../util/formatter';
 import { useAttributePreference, usePreference } from '../util/preferences';
 import { useTranslation } from './LocalizationProvider';
 import { useAdministrator } from '../util/permissions';
+import { toJson } from '../util/converter';
 import AddressValue from './AddressValue';
 import GeofencesValue from './GeofencesValue';
 
 const PositionValue = ({ position, property, attribute }) => {
   const t = useTranslation();
 
+  const theme = useTheme();
+
   const admin = useAdministrator();
 
   const device = useSelector((state) => state.devices.items[position.deviceId]);
 
-  const key = property || attribute;
-  const value = property ? position[property] : position.attributes[attribute];
+  let key;
+  let value;
+
+  // Attribute
+  if (!property) {
+    if (attribute.includes(':')) {
+      const parts = attribute.split(':');
+      // TODO: change
+      key = parts[parts.length - 1];
+      value = JSON.parse(position.attributes[parts.shift()]);
+      parts.forEach((part) => value = value[part]);
+    // Base value for normal attributes
+    } else {
+      key = attribute;
+      value = position.attributes[attribute];
+    }
+
+    // Convert value to json if possible
+    value = toJson(value);
+
+    // Visualise parent objects with the 'Array' type
+    if (Array.isArray(value)) {
+      value = 'Array';
+    // Visualize parent objects with the 'Object' type
+    } else if ((value != null && typeof value === 'object')) {
+      value = 'Object';
+    }
+  // Property
+  } else {
+    key = property;
+    value = position[property];
+  }
 
   const distanceUnit = useAttributePreference('distanceUnit');
   const altitudeUnit = useAttributePreference('altitudeUnit');
@@ -56,10 +90,11 @@ const PositionValue = ({ position, property, attribute }) => {
       default:
         if (typeof value === 'number') {
           return formatNumber(value);
-        } if (typeof value === 'boolean') {
+        }
+        if (typeof value === 'boolean') {
           return formatBoolean(value, t);
         }
-        return value || '';
+        return value || 'null';
     }
   };
 
@@ -90,6 +125,20 @@ const PositionValue = ({ position, property, attribute }) => {
       }
       return '';
     default:
+      if (value === null) {
+        return (
+          <Typography color={theme.palette.error.main}>
+            {formatValue(value)}
+          </Typography>
+        );
+      }
+      if (value === 'Object' || value === 'Array') {
+        return (
+          <strong>
+            {formatValue(value)}
+          </strong>
+        );
+      }
       return formatValue(value);
   }
 };
