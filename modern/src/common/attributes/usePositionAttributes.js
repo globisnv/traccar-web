@@ -104,6 +104,10 @@ export default (t) => useMemo(() => ({
     name: t('positionRssi'),
     type: 'number',
   },
+  coolantTemp: {
+    name: t('positionCoolantTemp'),
+    type: 'number',
+  },
   gps: {
     name: t('positionGps'),
     type: 'number',
@@ -146,6 +150,10 @@ export default (t) => useMemo(() => ({
   },
   steps: {
     name: t('positionSteps'),
+    type: 'number',
+  },
+  heartRate: {
+    name: t('positionHeartRate'),
     type: 'number',
   },
   input: {
